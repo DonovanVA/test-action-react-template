@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${{ parameters.name }}
-  namespace: ${{ parameters.name }}
+  name: <parameters.name>
+  namespace: <parameters.name>
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${{ parameters.name }}
+      app: <parameters.name>
   template:
     metadata:
       labels:
-        app: ${{ parameters.name }}
+        app: <parameters.name>
     spec:
       containers:
         - name: backstage
-          image: ${{ secrets.DOCKER_USERNAME }}/${{ parameters.name }}:1.0.0
+          image: ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -30,8 +30,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${{ parameters.name }}.service
-  namespace: ${{ parameters.name }}
+  name: <parameters.name>.service
+  namespace: <parameters.name>
 spec:
   selector:
     app: backstage
@@ -43,14 +43,14 @@ spec:
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: ${{ parameters.name }}-http
-  namespace: ${{ parameters.name }}
+  name: <parameters.name>-http
+  namespace: <parameters.name>
 spec:
   virtualhost:
-    fqdn: ${{ parameters.proxy }}
+    fqdn: <parameters.proxy>
     tls:
       secretName: backstage-cert
   routes:
     - services:
-        - name: ${{ parameters.name }}.service
+        - name: <parameters.name>.service
           port: 80

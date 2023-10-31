@@ -22,6 +22,6 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker buildx create --use
-          docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/${{ parameters.name }}:latest .
+          docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ parameters.name }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest
