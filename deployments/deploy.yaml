@@ -14,7 +14,7 @@ spec:
         app: <parameters.name>
     spec:
       containers:
-        - name: backstage
+        - name: <parameters.name>
           image: ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:1.0.0
           imagePullPolicy: IfNotPresent
           ports:

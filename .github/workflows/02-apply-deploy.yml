@@ -1,0 +1,22 @@
+name: Apply Kubernetes YAML After Container Push
+
+on:
+  repository_dispatch:
+    types:
+      - 02-apply-deploy
+
+jobs:
+  apply-k8s:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Log into Kubernetes Cluster
+        env:
+          KUBE_CONFIG_DATA: ${{github.event.client_payload.kube_config_data}}}  # Set your Kubeconfig data secret
+
+      - name: Apply Kubernetes YAML
+        run: |
+          kubectl apply -f ./deploynments/deploy.yaml
