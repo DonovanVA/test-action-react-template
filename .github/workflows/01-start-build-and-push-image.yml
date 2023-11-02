@@ -20,7 +20,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
           DOCKER_PASSWORD: ${{ github.event.client_payload.docker_password }}
-          KUBE_CONFIG_DATA: ${{ github.event.client_payload.kube_config_data }}}
+          KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}}
         run: |
           docker buildx create --use
           docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest .
@@ -36,7 +36,7 @@ jobs:
               repo: ${{ inputs.repo-url }},
               event_type: '02-apply-deploy',
               client_payload: {
-                kube_config_data: process.env.KUBE_CONFIG_DATA,  # Pass Kubeconfig data to the third workflow
+                kube_credentials: process.env.KUBE_CREDENTIALS,  # Pass Kubeconfig data to the third workflow
               }
             });
 

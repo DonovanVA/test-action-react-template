@@ -15,8 +15,18 @@ jobs:
 
       - name: Log into Kubernetes Cluster
         env:
-          KUBE_CONFIG_DATA: ${{github.event.client_payload.kube_config_data}}}  # Set your Kubeconfig data secret
-
+          KUBE_CREDENTIALS: ${{github.event.client_payload.kube_config_data}}}  # Set your Kubeconfig data secret
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.KUBE_CREDENTIALS }}
+          allow-no-subscriptions: true
       - name: Apply Kubernetes YAML
         run: |
-          kubectl apply -f ./deploynments/deploy.yaml
+          kubectl apply -f path/to/your/kubernetes/yaml/file.yaml
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az logout
+            az cache purge
+            az account clear
