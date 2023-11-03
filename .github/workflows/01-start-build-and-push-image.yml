@@ -21,22 +21,22 @@ jobs:
           DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
           DOCKER_PASSWORD: ${{ github.event.client_payload.docker_password }}
           KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}}
+          GITHUB_TOKEN: ${{github.event.client_payload.github_token }}
         run: |
           docker buildx create --use
           docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest
 
-      - name: Dispatch Event to Repo B (Trigger Kubernetes Apply)
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.repos.createDispatchEvent({
-              repo: ${{ inputs.repo-url }},
-              event_type: '02-apply-deploy',
-              client_payload: {
-                kube_credentials: process.env.KUBE_CREDENTIALS,  # Pass Kubeconfig data to the third workflow
-              }
-            });
-
+      
+      - name: Trigger Kubernetes Apply Workflow
+        env:
+          AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOME_EVENT: 02-apply-deploy
+          KUBE_CREDENTIALS: $KUBE_CREDENTIALS
+        run: |
+          curl -H "Accept: application/vnd.github.everest-preview+json" \
+          -H "Authorization: token $AUTH_TOKEN" \
+          --request POST \
+          --data "{\"event_type\": \"$SOME_EVENT\", \"client_payload\": { \"kube_credentials\": \"$KUBE_CREDENTIALS\" }}" \
+          https://api.github.com/repos/YOURNAME/APPLICATION_NAME/dispatches
