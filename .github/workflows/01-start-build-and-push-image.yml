@@ -6,7 +6,7 @@ on:
       - 01-start-build-and-push-image
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
