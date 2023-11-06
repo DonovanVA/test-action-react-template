@@ -22,6 +22,9 @@ jobs:
           DOCKER_PASSWORD: ${{ github.event.client_payload.docker_password }}
           KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
         run: |
+          echo "DOCKER_USERNAME: $DOCKER_USERNAME"
+          echo "DOCKER_PASSWORD: $DOCKER_PASSWORD"
+          echo "KUBE_CREDENTIALS: $KUBE_CREDENTIALS"
           docker buildx create --use
           docker buildx build -t $DOCKER_USERNAME/<parameters.name>:latest .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
