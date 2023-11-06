@@ -36,14 +36,14 @@ jobs:
       - name: Trigger Kubernetes Apply Workflow  
         env:
           KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
-          AUTH_TOKEN: ${{ github.event.client_payload.github_token }}
+          GITHUB_TOKEN: ${{ github.event.client_payload.github_token }}
         run: |
           # Define the input parameters for the target workflow
           INPUTS='{"kube_credentials":"'$KUBE_CREDENTIALS'"}'
 
           # Trigger the workflow using the workflow_dispatch event
           curl -X POST \
-            -H "Authorization: Bearer $AUTH_TOKEN" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/02-apply-deploy.yml/dispatches" \
             -d "$INPUTS"
