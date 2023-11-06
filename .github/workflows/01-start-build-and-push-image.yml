@@ -12,35 +12,34 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      - name: Set Up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
       - name: Build and Push Docker Image
         env:
           DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
           DOCKER_PASSWORD: ${{ github.event.client_payload.docker_password }}
           KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
-        run: |
-          echo "DOCKER_USERNAME: $DOCKER_USERNAME"
-          echo "DOCKER_PASSWORD: $DOCKER_PASSWORD"
-          echo "KUBE_CREDENTIALS: $KUBE_CREDENTIALS"
-
-          docker buildx create --use
-          docker buildx build -t "$DOCKER_USERNAME/<parameters.name>:latest" .
-          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-          docker push "$DOCKER_USERNAME/<parameters.name>:latest"
-          
-      - name: Trigger Kubernetes Apply Workflow
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTH_TOKEN: ${{ github.event.client_payload.github_token }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ DOCKER_USERNAME }}/<parameters.name>:latest
+      - name: Trigger Kubernetes Apply Workflow  
         run: |
           # Define the input parameters for the target workflow
           INPUTS='{"kube_credentials":"'$KUBE_CREDENTIALS'"}'
 
           # Trigger the workflow using the workflow_dispatch event
           curl -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Authorization: Bearer $AUTH_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/02-apply-deploy.yml/dispatches" \
             -d "$INPUTS"
