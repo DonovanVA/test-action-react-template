@@ -40,9 +40,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         env:
-          DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }} 
-        with:
-          username: ${{ env.DOCKER_USERNAME }}
+          DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
+          DOCKER_PASSWORD: ${{ github.event.client_payload.docker_password }}
         with:
           context: .
           file: ./Dockerfile
