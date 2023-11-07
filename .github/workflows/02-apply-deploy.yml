@@ -2,7 +2,7 @@ name: Apply Kubernetes YAML After Container Push
 
 on:
   workflow_run:
-    workflows: ["01-start-build-and-push-image"] # The name of your source workflow
+    workflows: ["Docker Build and Push"] # The name of your source workflow
     types:
       - completed
 
