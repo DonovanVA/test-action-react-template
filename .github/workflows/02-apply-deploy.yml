@@ -13,14 +13,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      - name: Log into Kubernetes Cluster
-        env:
-          KUBE_CREDENTIALS: ${{ github.event.inputs.kube_credentials }} # Set your Kubeconfig data secret
+        
       - uses: azure/login@v1
+        env:
+            KUBE_CREDENTIALS: ${{ github.event.inputs.kube_credentials }} # Set your Kubeconfig data secret
         with:
-          creds: ${{ secrets.KUBE_CREDENTIALS }}
-          allow-no-subscriptions: true
+          creds: ${{ env.KUBE_CREDENTIALS }}
+
       - name: Apply Kubernetes YAML
         run: |
           kubectl apply -f path/to/your/kubernetes/yaml/file.yaml
