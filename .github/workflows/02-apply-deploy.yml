@@ -1,9 +1,10 @@
 name: Apply Kubernetes YAML After Container Push
 
 on:
-  repository_dispatch:
+  workflow_run:
+    workflows: ["01-start-build-and-push-image"] # The name of your source workflow
     types:
-      - 02-apply-deploy
+      - completed
 
 jobs:
   apply-k8s:
@@ -15,7 +16,7 @@ jobs:
 
       - name: Log into Kubernetes Cluster
         env:
-          KUBE_CREDENTIALS: ${{github.event.client_payload.kube_config_data}}}  # Set your Kubeconfig data secret
+          KUBE_CREDENTIALS: ${{ github.event.inputs.kube_credentials }} # Set your Kubeconfig data secret
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.KUBE_CREDENTIALS }}
