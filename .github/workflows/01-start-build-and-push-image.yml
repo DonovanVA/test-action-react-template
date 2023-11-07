@@ -60,4 +60,6 @@ jobs:
 
           # Trigger the "02-apply-deploy.yml" workflow in the same repository
           echo "Triggering '02-apply-deploy.yml' workflow..."
+          echo "Workflow Run Payload: ${{ toJson(github.event) }}"
           echo "::set-output name=input_payload::$input_payload"
+      
