@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.event.client_payload.github_token }}
         run: |
           # Define the input parameters for the target workflow
-          INPUTS='{"kube_credentials":"'$KUBE_CREDENTIALS'"}'
+          INPUTS="{\"kube_credentials\":\"$KUBE_CREDENTIALS\"}"
 
           # Trigger the workflow using the workflow_dispatch event
           curl -X POST \
