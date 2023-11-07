@@ -46,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: $DOCKER_USERNAME/<parameters.name>:latest
+          tags: ${{ env.DOCKER_USERNAME }}/<parameters.name>:latest
 
       - name: Trigger Kubernetes Apply Workflow
         env:
