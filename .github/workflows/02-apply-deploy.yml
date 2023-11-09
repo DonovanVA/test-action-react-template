@@ -30,3 +30,7 @@ jobs:
             az logout
             az cache purge
             az account clear
+
+
+  ## tenantID: cc39bc3b-9e6b-4556-aa3e-d2935e4801af
+  ## subscriptionID: dcbec514-4dc8-4965-a962-b2b3b741ddfe
