@@ -18,9 +18,18 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }} # Set your Azure credentials secret
+          creds: ${{ github.event.inputs.input_payload.kube_credentials }} # Set your Azure credentials secret
 
+      - name: Setup Kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.15.0' # default is latest stable
+        id: install
+        
       - name: Apply Kubernetes YAML
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ github.event.inputs.input_payload.kube_config }}
         run: |
           kubectl apply -f ./deployments/deploy.yaml
 

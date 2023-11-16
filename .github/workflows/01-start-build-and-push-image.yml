@@ -19,10 +19,12 @@ jobs:
           DOCKER_PASSWORD: ${{ github.event.client_payload.docker_password }}
           KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
           GITHUB_TOKEN: ${{ github.event.client_payload.github_token }}
+          KUBE_CONFIG: ${{ github.event.client_payload.kube_config }}
         run: |
           echo "DOCKER_USERNAME: $DOCKER_USERNAME"
           echo "DOCKER_PASSWORD: $DOCKER_PASSWORD"
           echo "KUBE_CREDENTIALS: $KUBE_CREDENTIALS"
+          echo "KUBE_CONFIG: $KUBE_CONFIG"
           echo "GITHUB_TOKEN: $GITHUB_TOKEN"
 
       - name: Login to Docker Hub
@@ -51,12 +53,14 @@ jobs:
       - name: Trigger Kubernetes Apply Workflow
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
+          KUBE_CONFIG: ${{ github.event.client_payload.kube_config }}
         run: |
           # Trigger the workflow using the workflow_run event
           echo "::set-output name=triggering::true"  # Use this to trigger the workflow
 
           # Prepare the input payload with kube_credentials
-          input_payload="{\"kube_credentials\":\"$KUBE_CREDENTIALS\"}"
+          input_payload="{\"kube_credentials\":\"$KUBE_CREDENTIALS\",\"kube_config\":\"$KUBE_CONFIG\"}"
 
           # Trigger the "02-apply-deploy.yml" workflow in the same repository
           echo "Triggering '02-apply-deploy.yml' workflow..."
