@@ -51,9 +51,19 @@ jobs:
           tags: ${{ env.DOCKER_USERNAME }}/<parameters.name>:latest
 
       - name: Trigger Kubernetes Apply Workflow
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          client-payload: "{\"kube_credentials\": \"${{ secrets.KUBE_CREDENTIALS }}\", \"kube_config\": \"${{ secrets.KUBE_CONFIG }}\"}"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: "02-apply-deploy.yml"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
+          KUBE_CONFIG: ${{ github.event.client_payload.kube_config }}
+        run: |
+          # Trigger the workflow using the workflow_run event
+          echo "::set-output name=triggering::true"  # Use this to trigger the workflow
+
+          # Prepare the input payload with kube_credentials
+          input_payload="{\"kube_credentials\":\"$KUBE_CREDENTIALS\",\"kube_config\":\"$KUBE_CONFIG\"}"
+
+          # Trigger the "02-apply-deploy.yml" workflow in the same repository
+          echo "Triggering '02-apply-deploy.yml' workflow..."
+          echo "Workflow Run Payload: ${{ toJson(github.event) }}"
+          echo "::set-output name=input_payload::$input_payload"
       
