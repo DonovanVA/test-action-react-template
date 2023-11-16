@@ -14,10 +14,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # Install Azure CLI
-      - name: Install Azure CLI
-        uses: azure/CLI@v1
-
       # Login to Azure using service principal credentials or a managed identity
       - name: Azure Login
         uses: azure/login@v1
