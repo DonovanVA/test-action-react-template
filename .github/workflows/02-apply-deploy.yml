@@ -14,11 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Echo and Base64 Decode Kube Credentials
+        run: |
+          echo "Kube Credentials: ${{ github.event.inputs.input_payload.kube_credentials }}"
+          AZURE_CREDENTIALS=$(echo "${{ github.event.inputs.input_payload.kube_credentials }}" | base64 -d)
+          echo "Base64 Decoded Kube Credentials: $AZURE_CREDENTIALS"
+
       # Login to Azure using service principal credentials or a managed identity
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ github.event.inputs.input_payload.kube_credentials }} # Set your Azure credentials secret
+          creds: ${{ env.AZURE_CREDENTIALS }} # Use the decoded credentials
 
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v3
