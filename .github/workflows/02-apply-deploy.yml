@@ -13,23 +13,28 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
-      - uses: azure/login@v1
-        env:
-            KUBE_CREDENTIALS: ${{ github.event.inputs.kube_credentials }} # Set your Kubeconfig data secret
+
+      # Install Azure CLI
+      - name: Install Azure CLI
+        uses: azure/CLI@v1
+
+      # Login to Azure using service principal credentials or a managed identity
+      - name: Azure Login
+        uses: azure/login@v1
         with:
-          creds: ${{ env.KUBE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }} # Set your Azure credentials secret
 
       - name: Apply Kubernetes YAML
         run: |
-          kubectl apply -f path/to/your/kubernetes/yaml/file.yaml
+          kubectl apply -f ./deployments/deploy.yaml
+
+      # Perform Azure CLI operations
       - name: Azure CLI script
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az logout
-            az cache purge
-            az account clear
+        run: |
+          az logout
+          az cache purge
+          az account clear
+
 
 
   ## tenantID: cc39bc3b-9e6b-4556-aa3e-d2935e4801af
