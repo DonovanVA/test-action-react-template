@@ -30,8 +30,8 @@ jobs:
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ github.event.inputs.input_payload.kube_config }}
-        run: |
-          kubectl apply -f ./deployments/deploy.yaml
+        with:
+          args: apply -f ./deployments/deploy.yaml
 
       # Perform Azure CLI operations
       - name: Azure CLI script
