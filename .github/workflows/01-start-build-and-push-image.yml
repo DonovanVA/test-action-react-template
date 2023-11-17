@@ -58,7 +58,9 @@ jobs:
         run: |
           # Trigger the workflow using the workflow_run event
           echo "::set-output name=triggering::true"  # Use this to trigger the workflow
-
+          echo "KUBE_CREDENTIALS: $KUBE_CREDENTIALS"
+          echo "KUBE_CONFIG: $KUBE_CONFIG"
+          echo "GITHUB_TOKEN: $GITHUB_TOKEN"
           # Prepare the input payload with kube_credentials
           input_payload="{\"kube_credentials\":\"$KUBE_CREDENTIALS\",\"kube_config\":\"$KUBE_CONFIG\"}"
 
