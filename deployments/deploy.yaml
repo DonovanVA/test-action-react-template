@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: <parameters.name>
-  namespace: <parameters.name>
+  namespace: default #<parameters.name>
 spec:
   replicas: 1
   selector:
@@ -31,7 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: <parameters.name>.service
-  namespace: <parameters.name>
+  namespace:  default #<parameters.name>
 spec:
   selector:
     app: backstage
@@ -44,7 +44,7 @@ apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
   name: <parameters.name>-http
-  namespace: <parameters.name>
+  namespace:  default #<parameters.name>
 spec:
   virtualhost:
     fqdn: <parameters.proxy>
