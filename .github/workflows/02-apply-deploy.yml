@@ -16,7 +16,6 @@ jobs:
 
       - name: Echo and Base64 Decode Kube Credentials
         run: |
-          echo "Kube Credentials: ${{ github.event.client_payload.kube_credentials }}
           AZURE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
           echo "Base64 Decoded Kube Credentials: $AZURE_CREDENTIALS"
 
