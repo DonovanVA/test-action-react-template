@@ -16,7 +16,7 @@ jobs:
 
       - name: Echo and Base64 Decode Kube Credentials
         run: |
-          AZURE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
+          AZURE_CREDENTIALS=$(echo "${{ github.event.inputs.input_payload.kube_credentials }}" | base64 -d)
           echo "Base64 Decoded Kube Credentials: $AZURE_CREDENTIALS"
 
       # Login to Azure using service principal credentials or a managed identity
@@ -34,7 +34,7 @@ jobs:
       - name: Apply Kubernetes YAML
         uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG: ${{ github.event.client_payload.kube_config }}
+          KUBE_CONFIG: ${{ github.event.inputs.input_payload.kube_config }}
         with:
           args: apply -f ./deployments/deploy.yaml
 
