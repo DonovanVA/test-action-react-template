@@ -1,10 +1,8 @@
 name: Apply Kubernetes YAML After Container Push
 
 on:
-  workflow_run:
-    workflows: ["Docker Build and Push"] # The name of your source workflow
-    types:
-      - completed
+  repository_dispatch:
+    types: [02-repository-dispatch]
 
 jobs:
   apply-k8s:
@@ -16,14 +14,16 @@ jobs:
 
       - name: Echo and Base64 Decode Kube Credentials
         run: |
-          AZURE_CREDENTIALS=$(echo "${{ github.event.inputs.input_payload.kube_credentials }}" | base64 -d)
+          AZURE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}"" | base64 -d)
           echo "Base64 Decoded Kube Credentials: $AZURE_CREDENTIALS"
 
       # Login to Azure using service principal credentials or a managed identity
       - name: Azure Login
         uses: azure/login@v1
+        env:
+          KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}"
         with:
-          creds: ${{ env.AZURE_CREDENTIALS }} # Use the decoded credentials
+          creds: ${{ env.KUBE_CREDENTIALS }} # Use the decoded credentials
 
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v3
@@ -35,7 +35,7 @@ jobs:
       - name: Apply Kubernetes YAML
         uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG: ${{ github.event.inputs.input_payload.kube_config }}
+          KUBE_CONFIG: ${{ github.event.client_payload.kube_config }}
         with:
           args: apply -f ./deployments/deploy.yaml
 
