@@ -21,7 +21,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         env:
-          KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}"
+          KUBE_CREDENTIALS: ${{ github.event.client_payload.kube_credentials }}
         with:
           creds: ${{ env.KUBE_CREDENTIALS }} # Use the decoded credentials
 
