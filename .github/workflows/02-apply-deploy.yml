@@ -26,7 +26,7 @@ jobs:
           DECODED_KUBE_CREDENTIALS: $DECODED_KUBE_CREDENTIALS
 
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/actions/login@v1
         with:
           creds: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }} # Use the decoded credentials from the previous step
 
