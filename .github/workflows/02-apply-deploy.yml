@@ -21,14 +21,14 @@ jobs:
         run: |
           DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
           echo "Decoded Kube Credentials: $DECODED_KUBE_CREDENTIALS"
+        id: decode_credentials
         env:
           DECODED_KUBE_CREDENTIALS: $DECODED_KUBE_CREDENTIALS
 
-# Login to Azure using service principal credentials or a managed identity
-- name: Azure Login
-  uses: azure/login@v1
-  with:
-    creds: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }} # Use the decoded credentials
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }} # Use the decoded credentials from the previous step
 
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v3
