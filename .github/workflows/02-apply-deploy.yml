@@ -30,12 +30,22 @@ jobs:
         with:
           creds: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }} # Use the decoded credentials from the previous step
 
+      - name: Verify azure subscription
+        run: |
+          az account list
+      
+      - name: Set env variables in terminal
+        run: |
+          $Env:ARM_CLIENT_ID = "$env:clientid"
+          $Env:ARM_CLIENT_SECRET = "$env:clientsecret"
+          $Env:ARM_SUBSCRIPTION_ID = "$env:subscriptionid"
+          $Env:ARM_TENANT_ID = "$env:tenantid"
+          
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'v1.15.0' # default is latest stable
         id: install
-        
       
       - name: Apply Kubernetes YAML
         uses: actions-hub/kubectl@master
@@ -44,6 +54,9 @@ jobs:
         with:
           args: apply -f ./deployments/deploy.yaml
 
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        
       # Perform Azure CLI operations
       - name: Azure CLI script
         run: |
