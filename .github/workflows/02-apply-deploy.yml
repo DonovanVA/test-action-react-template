@@ -7,7 +7,6 @@ on:
 jobs:
   apply-k8s:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -15,12 +14,18 @@ jobs:
       - name: Decode and Set Kube Credentials
         id: decode-base64-step
         run: |
-          echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d
-          
+          DECODED_KUBE_CREDENTIALS= `echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d`
+          echo "::set-output name=decoded-kube-credentials::$DECODED_KUBE_CREDENTIALS"
+      
+      - name: Use Decoded Credentials
+        run: |
+          # Accessing the decoded credentials from the previous step
+          echo "Decoded Kube Credentials: ${{ steps.decode-base64-step.outputs.decoded-kube-credentials }}"
+
       - name: Azure Login
         uses: Azure/login@v1.4.6
         env:
-          KUBE_CREDENTIALS : ${{ steps.decode-base64-step.outputs.result }}
+          KUBE_CREDENTIALS : ${{ steps.decode-base64-step.outputs.decoded-kube-credentials }}
         with:
           creds: ${{ env.DECODED_KUBE_CREDENTIALS }}
       
