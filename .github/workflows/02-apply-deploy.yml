@@ -25,6 +25,11 @@ jobs:
         env:
           DECODED_KUBE_CREDENTIALS: $DECODED_KUBE_CREDENTIALS
 
+
+      - name: Echo Decoded Kube Credentials
+        run: |
+          echo "Decoded Kube Credentials: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }}"
+        
       - name: Azure Login
         uses: azure/login@v1
         with:
