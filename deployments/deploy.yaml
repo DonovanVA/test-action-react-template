@@ -21,20 +21,16 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
-          resources: # Add this section
-            requests:
-              memory: "512Mi" # Set the memory request to 512 Megabytes
-            limits:
-              memory: "1Gi" # Set the memory limit to 1 Gigabyte
+      
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: <parameters.name>.service
+  name: <parameters.name>-service
   namespace:  default #<parameters.name>
 spec:
   selector:
-    app: backstage
+    app: <parameters.name>
   ports:
     - name: http
       port: 80
