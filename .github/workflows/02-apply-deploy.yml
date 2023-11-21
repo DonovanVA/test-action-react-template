@@ -13,15 +13,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Echo Decoded Kube Credentials
+      - name: Decode and Set Kube Credentials
         run: |
+          DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
           echo "Decoded Kube Credentials: $DECODED_KUBE_CREDENTIALS"
-
+          echo "DECODED_KUBE_CREDENTIALS=$DECODED_KUBE_CREDENTIALS" >> $GITHUB_ENV
+      
       - name: Azure Login
         uses: Azure/login@v1.4.6
         with:
-          creds: $DECODED_KUBE_CREDENTIALS
-
+          creds: ${{ env.DECODED_KUBE_CREDENTIALS }}
+      
+      
       - name: Verify azure subscription
         run: |
           az account list
