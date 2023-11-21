@@ -11,18 +11,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
     
-      - name: echo variables
-        env:
-          CLIENT_ID: ${{ github.event.client_payload.kube_credentials_clientid }}
-          CLIENT_SECRET: ${{ github.event.client_payload.kube_credentials_clientsecret }}
-          SUBSCRIPTION_ID: ${{ github.event.client_payload.kube_credentials_subscriptionid}}
-          TENANT_ID: ${{ github.event.client_payload.kube_credentials_tenantid }}
-        run: |
-          echo "CLIENT_ID: $CLIENT_ID"
-          echo "CLIENT_SECRET: $CLIENT_SECRET"
-          echo "SUBSCRIPTION_ID: $SUBSCRIPTION_ID"
-          echo "TENANT_ID: $TENANT_ID"
-
       - name: Azure Login
         uses: Azure/login@v1.4.6
         env:
