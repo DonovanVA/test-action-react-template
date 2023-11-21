@@ -3,8 +3,7 @@ name: Apply Kubernetes YAML After Container Push
 on:
   repository_dispatch:
     types: [02-repository-dispatch]
-env:
-  DECODED_KUBE_CREDENTIALS: $(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
+
 jobs:
   apply-k8s:
     runs-on: ubuntu-latest
@@ -17,15 +16,13 @@ jobs:
         run: |
           DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
           echo "Decoded Kube Credentials: $DECODED_KUBE_CREDENTIALS"
-          echo "::set-env name=DECODED_KUBE_CREDENTIALS::$DECODED_KUBE_CREDENTIALS"
-
+          echo "DECODED_KUBE_CREDENTIALS=$DECODED_KUBE_CREDENTIALS" >> $GITHUB_ENV
       
       - name: Azure Login
         uses: Azure/login@v1.4.6
         with:
           creds: ${{ env.DECODED_KUBE_CREDENTIALS }}
       
-
       - name: Verify azure subscription
         run: |
           az account list
