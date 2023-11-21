@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: <parameters.name>
-          image: ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:1.0.0
+          image: ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
