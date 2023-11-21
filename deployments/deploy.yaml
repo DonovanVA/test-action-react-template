@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: <parameters.name>
-          image: <parameters.docker_username>/<parameters.name>:latest
+          image: <GH_ACTION.docker_username>/<parameters.name>:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

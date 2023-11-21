@@ -30,7 +30,11 @@ jobs:
         with:
           version: 'v1.15.0' # default is latest stable
         id: install
-      
+      - name: Replace Placeholder in File
+        env:
+          DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
+        run: |
+          sed -i 's/<GH_ACTION.docker_username>/${DOCKER_USERNAME}/g' ./deployments/deploy.yaml
       - name: Apply Kubernetes YAML
         uses: actions-hub/kubectl@master
         env:
