@@ -10,19 +10,28 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - uses: akiojin/decode-base64-github-action@v0.1.0
-        with:
-          base64: <Base64>
-          environment: ${{ github.event.client_payload.kube_credentials }}
-      - run: |
-          echo $DECODED
+    
+      - name: echo variables
+        env:
+          CLIENT_ID: ${{ github.event.client_payload.kube_credentials_clientid }}
+          CLIENT_SECRET: ${{ github.event.client_payload.kube_credentials_clientsecret }}
+          SUBSCRIPTION_ID: ${{ github.event.client_payload.subscription_id}}
+          TENANT_ID: ${{ github.event.client_payload.kube_credentials_tenant_id }}
+        run: |
+          echo "CLIENT_ID: $CLIENT_ID"
+          echo "CLIENT_SECRET: $CLIENT_SECRET"
+          echo "SUBSCRIPTION_ID: $SUBSCRIPTION_ID"
+          echo "TENANT_ID: $TENANT_ID"
 
       - name: Azure Login
         uses: Azure/login@v1.4.6
         env:
-          KUBE_CREDENTIALS : ${{ steps.decode-base64-step.outputs.decoded-kube-credentials }}
+          CLIENT_ID: ${{ github.event.client_payload.kube_credentials_clientid }}
+          CLIENT_SECRET: ${{ github.event.client_payload.kube_credentials_clientsecret }}
+          SUBSCRIPTION_ID: ${{ github.event.client_payload.subscription_id}}
+          TENANT_ID: ${{ github.event.client_payload.kube_credentials_tenant_id }}
         with:
-          creds: ${{ env.DECODED_KUBE_CREDENTIALS }}
+          creds: '{"clientId":"${{ env.CLIENT_ID }}","clientSecret":"${{ env.CLIENT_SECRET }}","subscriptionId":"${{ env.SUBSCRIPTION_ID }}","tenantId":"${{ env.TENANT_ID }}"}'
       
       - name: Verify azure subscription
         run: |
