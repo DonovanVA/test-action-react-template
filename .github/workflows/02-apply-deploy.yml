@@ -14,7 +14,7 @@ jobs:
       - name: Decode and Set Kube Credentials
         id: decode-base64-step
         run: |
-          DECODED_KUBE_CREDENTIALS= `echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d`
+          DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
           echo "::set-output name=decoded-kube-credentials::$DECODED_KUBE_CREDENTIALS"
       
       - name: Use Decoded Credentials
