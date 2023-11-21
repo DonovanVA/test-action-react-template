@@ -15,7 +15,7 @@ jobs:
         env:
           CLIENT_ID: ${{ github.event.client_payload.kube_credentials_clientid }}
           CLIENT_SECRET: ${{ github.event.client_payload.kube_credentials_clientsecret }}
-          SUBSCRIPTION_ID: ${{ github.event.client_payload.subscriptionid}}
+          SUBSCRIPTION_ID: ${{ github.event.client_payload.kube_credentials_subscriptionid}}
           TENANT_ID: ${{ github.event.client_payload.kube_credentials_tenantid }}
         run: |
           echo "CLIENT_ID: $CLIENT_ID"
@@ -28,7 +28,7 @@ jobs:
         env:
           CLIENT_ID: ${{ github.event.client_payload.kube_credentials_clientid }}
           CLIENT_SECRET: ${{ github.event.client_payload.kube_credentials_clientsecret }}
-          SUBSCRIPTION_ID: ${{ github.event.client_payload.subscriptionid}}
+          SUBSCRIPTION_ID: ${{ github.event.client_payload.kube_credentials_subscriptionid}}
           TENANT_ID: ${{ github.event.client_payload.kube_credentials_tenantid }}
         with:
           creds: '{"clientId":"${{ env.CLIENT_ID }}","clientSecret":"${{ env.CLIENT_SECRET }}","subscriptionId":"${{ env.SUBSCRIPTION_ID }}","tenantId":"${{ env.TENANT_ID }}"}'
