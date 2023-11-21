@@ -14,43 +14,14 @@ jobs:
 
       - name: Decode and Set Kube Credentials
         run: |
-          DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
-          echo "Decoded Kube Credentials: $DECODED_KUBE_CREDENTIALS"
-          echo "DECODED_KUBE_CREDENTIALS=$DECODED_KUBE_CREDENTIALS" >> $GITHUB_ENV
+          echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d
+        
       
       - name: Azure Login
         uses: Azure/login@v1.4.6
-        with:
-          creds: ${{ env.DECODED_KUBE_CREDENTIALS }}
-      
-      - name: Verify azure subscription
-        run: |
-          az account list
-          
-      - name: Setup Kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'v1.15.0' # default is latest stable
-        id: install
-      
-      - name: Apply Kubernetes YAML
-        uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG: ${{ github.event.client_payload.kube_config }}
-        with:
-          args: apply -f ./deployments/deploy.yaml
-
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      # Perform Azure CLI operations
-      - name: Azure CLI script
+          DECODED_STRING: ${{ steps.decode-base64-step.outputs.result }}
         run: |
-          az logout
-          az cache purge
-          az account clear
-
-
-
-  ## tenantID: cc39bc3b-9e6b-4556-aa3e-d2935e4801af
-  ## subscriptionID: dcbec514-4dc8-4965-a962-b2b3b741ddfe
+          echo "Decoded String: $DECODED_STRING"
+      
+     
