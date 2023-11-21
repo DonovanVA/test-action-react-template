@@ -35,7 +35,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
         run: |
-          sed -i 's/<GH_ACTION.docker_username>/${DOCKER_USERNAME}/g' ./deployments/deploy.yaml
+          sed -i 's/<GH_ACTION.docker_username>/${{env.DOCKER_USERNAME}}/g' ./deployments/deploy.yaml
           cat ./deployments/deploy.yaml   
       
       - name: Apply Kubernetes YAML
