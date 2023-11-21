@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: <parameters.name>
-          image: ${{ secrets.DOCKER_USERNAME }}/<parameters.name>:latest
+          image: <parameters.docker_username>/<parameters.name>:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
