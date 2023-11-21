@@ -33,8 +33,6 @@ jobs:
       - name: Verify azure subscription
         run: |
           az account list
-      
-    
           
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v3
