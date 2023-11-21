@@ -26,7 +26,7 @@ jobs:
           DECODED_KUBE_CREDENTIALS: $DECODED_KUBE_CREDENTIALS
 
       - name: Azure Login
-        uses: Azure/login@v1.4.6
+        uses: azure/login@v1
         with:
           creds: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }} # Use the decoded credentials from the previous step
 
@@ -56,7 +56,7 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
-        
+
       # Perform Azure CLI operations
       - name: Azure CLI script
         run: |
