@@ -17,23 +17,14 @@ jobs:
           AZURE_CREDENTIALS=$(echo ${{ github.event.client_payload.kube_credentials }} | base64 -d)
           echo "Base64 Decoded Kube Credentials: $AZURE_CREDENTIALS"
 
-      - name: Decode Kube Credentials
-        run: |
-          DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
-          echo "Decoded Kube Credentials: $DECODED_KUBE_CREDENTIALS"
-        id: decode_credentials
-        env:
-          DECODED_KUBE_CREDENTIALS: $DECODED_KUBE_CREDENTIALS
-
-
-      - name: Echo Decoded Kube Credentials
-        run: |
-          echo "Decoded Kube Credentials: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }}"
-        
       - name: Azure Login
         uses: Azure/login@v1.4.6
         with:
-          creds: ${{ steps.decode_credentials.outputs.DECODED_KUBE_CREDENTIALS }} # Use the decoded credentials from the previous step
+          creds: |
+            DECODED_KUBE_CREDENTIALS=$(echo "${{ github.event.client_payload.kube_credentials }}" | base64 -d)
+            echo "Decoded Kube Credentials: $DECODED_KUBE_CREDENTIALS"
+            echo "::set-output name=decoded_kube_credentials::$DECODED_KUBE_CREDENTIALS"
+
 
       - name: Verify azure subscription
         run: |
