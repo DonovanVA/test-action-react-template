@@ -16,7 +16,7 @@ spec:
       containers:
         - name: <parameters.name>
           image: <GH_ACTION.docker_username>/<parameters.name>:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 3000
