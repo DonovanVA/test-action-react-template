@@ -48,5 +48,5 @@ spec:
       secretName: backstage-cert
   routes:
     - services:
-        - name: <parameters.name>.service
+        - name: <parameters.name>-service
           port: 80
