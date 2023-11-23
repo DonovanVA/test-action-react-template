@@ -45,7 +45,7 @@ spec:
   virtualhost:
     fqdn: <parameters.proxy>
     tls:
-      secretName: example-certificate-2
+      secretName: backstage-cert
   routes:
     - services:
         - name: <parameters.name>.service
