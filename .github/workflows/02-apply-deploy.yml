@@ -11,16 +11,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
     
-      - name: Azure Login
-        uses: Azure/login@v1.4.6
+      - name: Login to cluster
         env:
           CLIENT_ID: ${{ github.event.client_payload.kube_credentials_clientid }}
           CLIENT_SECRET: ${{ github.event.client_payload.kube_credentials_clientsecret }}
           SUBSCRIPTION_ID: ${{ github.event.client_payload.kube_credentials_subscriptionid}}
           TENANT_ID: ${{ github.event.client_payload.kube_credentials_tenantid }}
-        with:
-          creds: '{"clientId":"${{ env.CLIENT_ID }}","clientSecret":"${{ env.CLIENT_SECRET }}","subscriptionId":"${{ env.SUBSCRIPTION_ID }}","tenantId":"${{ env.TENANT_ID }}"}'
-      
+        run: |
+          az account set --subscription "${{env.SUBSCRIPTION_ID}}"
+          az aks get-credentials --resource-group "<parameters.resource_group>" --name "<parameters.clustername>"
+        
       - name: Verify azure subscription
         run: |
           az account list
