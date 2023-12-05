@@ -45,7 +45,7 @@ spec:
   virtualhost:
     fqdn: <parameters.proxy>
     tls:
-      secretName: testaction
+      secretName: <parameters.name>dora
   routes:
     - services:
         - name: <parameters.name>-service
