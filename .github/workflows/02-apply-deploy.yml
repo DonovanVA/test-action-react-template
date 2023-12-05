@@ -2,7 +2,7 @@ name: Apply Kubernetes YAML After Container Push
 
 on:
   repository_dispatch:
-    types: [02-repository-dispatch]
+    types: [02-apply-deploy]
 
 jobs:
   apply-k8s:

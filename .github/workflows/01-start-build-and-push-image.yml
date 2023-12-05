@@ -47,5 +47,5 @@ jobs:
           DOCKER_USERNAME: ${{ github.event.client_payload.docker_username }}
         with:
           token: ${{ env.GITHUB_TOKEN }}
-          event-type: 02-repository-dispatch
+          event-type: 02-apply-deploy
           client-payload: '{"kube_credentials_clientid": "${{ env.KUBE_CREDENTIALS_CLIENTID }}","kube_credentials_clientsecret": "${{ env.KUBE_CREDENTIALS_CLIENTSECRET }}","kube_credentials_tenantid": "${{ env.KUBE_CREDENTIALS_TENANTID }}","kube_credentials_subscriptionid": "${{ env.KUBE_CREDENTIALS_SUBSCRIPTIONID }}", "docker_username": "${{ env.DOCKER_USERNAME }}"}'
