@@ -43,7 +43,7 @@ metadata:
   namespace:  default #<parameters.name>
 spec:
   virtualhost:
-    fqdn: <parameters.proxy>
+    fqdn: <parameters.fqdn>
     tls:
       secretName: <parameters.name>dora
   routes:
@@ -61,7 +61,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: <parameters.proxy>
+    - host: <parameters.fqdn>
       http:
         paths:
           - path: /
@@ -73,5 +73,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - <parameters.proxy>
+        - <parameters.fqdn>
       secretName: <parameters.name>dora
